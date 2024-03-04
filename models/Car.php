@@ -4,17 +4,13 @@
     
     class Car extends ActiveRecord
     {
-        // private $brand_id;
-        // private $model;
-        // private $year;
-        // private $mileage;
-        // private $status;
+        // This method specifies the name of the database table associated with this model.
         public static function tableName()
             {
                 return 'cars'; 
             }
 
-
+        // Validation rules for attributes of the Car model.
         public function rules()
             {
                 return [
@@ -24,7 +20,7 @@
                     [['status'], 'in', 'range' => ['available', 'unavailable']],
                 ];
             }
-        
+        // Relation between the Car model and the CarBrand model.
         public function getBrand()
             {
                 return $this->hasOne(CarBrand::class, ['id' => 'brand_id']);

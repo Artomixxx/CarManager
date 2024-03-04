@@ -5,6 +5,7 @@
 $this->title = 'CarManager';
 ?>
 <div class="site-index">
+    <!-- Display a success message if it exists in the session. (Car added/updated) -->
     <?php if(yii::$app->session->hasFlash('message')):?>
         <div class="alert alert-dismissible alert-success">
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -16,43 +17,47 @@ $this->title = 'CarManager';
         <h1 class="display-4">CarManager</h1>
     </div>
     <div class="row">
+        <!-- Button to navigate to the 'Add' page. -->
         <span style="margin-bottom: 20px;"><?= Html::a('Add', ['/site/add'], ['class' => 'btn btn-primary'])?></span>
     </div>
     <div class="body-content">
 
         <div class="row">
-        <table class="table table-hover">
-        <thead>
-            <tr>
-            <th scope="col">Brand</th>
-            <th scope="col">Model</th>
-            <th scope="col">Year of manufacture</th>
-            <th scope="col">Mileage</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if(count($cars)>0): ?>
-                <?php foreach($cars as $car): ?>
-            <tr class="table-active">
-            <th scope="row"><?php echo $car->brand->brand_name;?></th>
-            <td><?php echo $car->model;?></td>
-            <td><?php echo $car->year;?></td>
-            <td><?php echo $car->mileage;?></td>
-            <td><?php echo $car->status;?></td>
-            <td>
-                <span><?= Html::a('Update', ['update', 'id' => $car->id], ['class' => 'btn btn-secondary']) ?></span>
-            </td>
-            </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+            <!-- Display a table of car records. -->
+            <table class="table table-hover">
+            <thead>
                 <tr>
-                    <td> No Records Found </td>
+                <th scope="col">Brand</th>
+                <th scope="col">Model</th>
+                <th scope="col">Year of manufacture</th>
+                <th scope="col">Mileage</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-        </table>
+            </thead>
+            <tbody>
+                <?php if(count($cars)>0): ?>
+                    <?php foreach($cars as $car): ?>
+                <tr class="table-active">
+                <th scope="row"><?php echo $car->brand->brand_name;?></th>
+                <td><?php echo $car->model;?></td>
+                <td><?php echo $car->year;?></td>
+                <td><?php echo $car->mileage;?></td>
+                <td><?php echo $car->status;?></td>
+                <td>
+                    <!-- Button to update the selected car record. -->
+                    <span><?= Html::a('Update', ['update', 'id' => $car->id], ['class' => 'btn btn-secondary']) ?></span>
+                </td>
+                </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <!-- Display a message if no car records are found. -->
+                    <tr>
+                        <td> No Records Found </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+            </table>
         </div>
 
     </div>

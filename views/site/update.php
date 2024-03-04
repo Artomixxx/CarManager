@@ -12,6 +12,7 @@ $this->title = 'CarManager';
     <div class="body-content">
     <?php $form = ActiveForm::begin()?>
         <div class="row">
+            <!-- Display the form to change car parameters -->
             <div class="form-control">
                 <div class="col-lg-6">
                     <?= $form->field($car, 'brand_id')->dropDownList(
@@ -25,11 +26,10 @@ $this->title = 'CarManager';
                         ['available' => 'Available', 'unavailable' => 'Unavailable'],
                         ['prompt' => 'Select Status']
                     ) ?>
-                    <div class="col-lg-3">
-                        <?= Html::submitButton('Update Auto', ['class'=>'btn btn-primary']);?>
-                    </div>
-                    <div class="col-lg-2">
-                        <a href=<?php echo yii::$app->homeUrl;?> class=" btn btn-primary"> Go Back </a>
+                     <!-- Buttons to submit changes and go back -->
+                    <div class="d-flex justify-content-between"> <!-- Flex container -->
+                        <?= Html::submitButton('Update Auto', ['class'=>'btn btn-primary flex-fill mr-2']);?> <!-- Flex item with margin-right -->
+                        <a href="<?= Yii::$app->homeUrl;?>" class="btn btn-primary flex-fill">Go Back</a> <!-- Flex item -->
                     </div>
                 </div>
             </div>

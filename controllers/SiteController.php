@@ -7,53 +7,10 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 use app\models\Car;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
 
     /**
      * Displays homepage.
@@ -62,15 +19,24 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        // Fetch all cars from the database and render index view with the fetched cars.
         $cars = Car::find()->all();
         return $this->render('index', ['cars' => $cars]);
     }
 
-    public function actionAdd(){
+    /**
+     * Adds a new car.
+     *
+     * @return string
+     */
+    public function actionAdd()
+    {
+        // Create a new instance of the Car model and fetch form data from the request.
         $car = new Car();
-        $formData = Yii::$app->request->post();
-        if($car->load($formData)){
-            if($car->save()){
+        // Validate if the request is a POST request
+        if(Yii::$app->request->isPost){
+            // Load the form data into the Car model and save it to the database.
+            if($car->load(Yii::$app->request->post()) && $car->save()){
                 Yii::$app->getSession()->setFlash('message','Auto added successfully.');
                 return $this->redirect(['index']);
             }
@@ -78,18 +44,30 @@ class SiteController extends Controller
                 Yii::$app->getSession()->setFlash('message','Failed to add.');
             }
         }
+        // Render add view with the car model.
         return $this->render('add', ['car' => $car]);
     }
 
-    public function actionUpdate($id){
+    /**
+     * Updates an existing car.
+     *
+     * @param integer $id
+     * @return string
+     */
+
+    public function actionUpdate($id)
+    {
+        // Find the car model by its ID.
         $car = Car::findOne($id);
-        if($car->load(Yii::$app->request->post()) && $car->save()){
-            Yii::$app->getSession()->setFlash('message','Auto updated successfully');
-            return $this->redirect(['index', 'id' => $car->id]);
+        //Validate if the request is a POST request
+        if(Yii::$app->request->isPost){
+            //Update the car model and save it to the database.
+            if($car->load(Yii::$app->request->post()) && $car->save()){
+                Yii::$app->getSession()->setFlash('message','Auto updated successfully');
+                return $this->redirect(['index', 'id' => $car->id]);
+            }
         }
-        else{
-            return $this->render('update', ['car' => $car]);
-        }
+        // Render update view with the car model.
         return $this->render('update', ['car' => $car]);
     }
 
